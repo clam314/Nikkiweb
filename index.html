@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NIKKE Spine Player</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./vendor/spine-player-4.0.30/spine-player.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="NIKKE Spine 播放器">
+      <div id="spine-player" class="spine-stage"></div>
+      <div id="hud" class="hud" aria-live="polite">
+        <span id="hud-character">-</span>
+        <strong id="hud-action">-</strong>
+      </div>
+      <div id="message" class="message" aria-live="polite">
+        <strong id="message-title">Loading</strong>
+        <span id="message-detail">正在载入 Nikke-db 资源</span>
+      </div>
+    </main>
+
+    <div id="menu-hotzone" class="menu-hotzone" aria-hidden="true"></div>
+    <aside id="drawer" class="drawer" aria-label="角色与动作菜单">
+      <div class="drawer-head">
+        <div>
+          <span>NIKKE</span>
+          <strong id="current-title">-</strong>
+        </div>
+        <button id="close-menu" class="ghost-button" type="button">收起</button>
+      </div>
+
+      <label class="search-box">
+        <span>搜索人物</span>
+        <input id="search-input" type="search" placeholder="名称 / 资源 ID" autocomplete="off" />
+      </label>
+
+      <section class="menu-group" aria-labelledby="characters-title">
+        <div class="group-title">
+          <h2 id="characters-title">人物</h2>
+          <span id="library-count">0</span>
+        </div>
+        <div id="character-list" class="menu-stack"></div>
+      </section>
+
+      <section class="menu-group posture-group" aria-labelledby="costumes-title">
+        <h2 id="costumes-title">姿态</h2>
+        <div id="costume-list" class="pill-grid"></div>
+      </section>
+
+      <section class="menu-group" aria-labelledby="actions-title">
+        <div class="group-title">
+          <h2 id="actions-title">展示</h2>
+          <span id="action-count">0</span>
+        </div>
+        <div id="action-list" class="pill-grid actions"></div>
+      </section>
+    </aside>
+
+    <script src="./vendor/spine-player-4.0.30/spine-player.js"></script>
+    <script src="./vendor/spine-player-4.1/spine-player.js"></script>
+    <script src="./data/characters.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

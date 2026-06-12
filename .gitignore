@@ -1,0 +1,5 @@
+.DS_Store
+.playwright-mcp/
+assets/nikke/
+nikkiweb-deploy.bundle
+nikkiweb-pages.zip
