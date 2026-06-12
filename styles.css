@@ -1,4 +1,31 @@
 :root {
+  color-scheme: light;
+  --bg: #edf3f7;
+  --panel: rgba(250, 252, 255, 0.9);
+  --panel-strong: rgba(255, 255, 255, 0.96);
+  --ink: #182330;
+  --muted: #667382;
+  --line: rgba(24, 35, 48, 0.16);
+  --active: #d85140;
+  --active-bg: rgba(216, 81, 64, 0.12);
+  --accent: #14887c;
+  --focus: rgba(20, 136, 124, 0.72);
+  --shadow: rgba(39, 52, 68, 0.22);
+  --control-bg: rgba(255, 255, 255, 0.66);
+  --control-strong: rgba(243, 247, 250, 0.92);
+  --hud-bg: rgba(250, 252, 255, 0.72);
+  --message-bg: rgba(250, 252, 255, 0.9);
+  --thumb-bg: #dfe7ed;
+  --stage-bg:
+    radial-gradient(circle at 52% 45%, rgba(255, 255, 255, 0.82), transparent 34%),
+    radial-gradient(circle at 50% 74%, rgba(20, 136, 124, 0.2), transparent 32%),
+    linear-gradient(180deg, #f7fbfd 0%, #d9e4ec 62%, #aebbc7 100%);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+[data-theme="dark"] {
   color-scheme: dark;
   --bg: #050607;
   --panel: rgba(9, 11, 13, 0.9);
@@ -7,11 +34,18 @@
   --muted: #9ba3ae;
   --line: rgba(255, 255, 255, 0.14);
   --active: #f06a50;
+  --active-bg: rgba(240, 106, 80, 0.16);
   --accent: #27c0ad;
+  --focus: rgba(39, 192, 173, 0.8);
   --shadow: rgba(0, 0, 0, 0.52);
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Microsoft YaHei", sans-serif;
+  --control-bg: rgba(255, 255, 255, 0.07);
+  --control-strong: rgba(21, 24, 28, 0.82);
+  --hud-bg: rgba(6, 7, 8, 0.54);
+  --message-bg: rgba(8, 10, 12, 0.84);
+  --thumb-bg: #070809;
+  --stage-bg:
+    radial-gradient(circle at 50% 48%, rgba(52, 58, 65, 0.36), transparent 46%),
+    linear-gradient(180deg, #080a0d, #020303 66%, #000);
 }
 
 * {
@@ -41,9 +75,7 @@ button {
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 48%, rgba(52, 58, 65, 0.36), transparent 46%),
-    linear-gradient(180deg, #080a0d, #020303 66%, #000);
+  background: var(--stage-bg);
 }
 
 .spine-stage {
@@ -90,7 +122,7 @@ button {
   padding: 9px 12px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(6, 7, 8, 0.54);
+  background: var(--hud-bg);
   opacity: 0;
   pointer-events: none;
   transform: translateY(6px);
@@ -134,7 +166,7 @@ body.menu-pinned .hud {
   padding: 18px 20px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(8, 10, 12, 0.84);
+  background: var(--message-bg);
   box-shadow: 0 24px 90px var(--shadow);
 }
 
@@ -167,7 +199,7 @@ body.menu-pinned .hud {
   display: grid;
   width: min(390px, calc(100vw - 28px));
   max-width: 100vw;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
   gap: 16px;
   padding: 18px;
   overflow: hidden;
@@ -214,7 +246,7 @@ body.menu-pinned .drawer {
   min-height: 34px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--control-bg);
   color: var(--ink);
   font-size: 12px;
   font-weight: 800;
@@ -226,6 +258,7 @@ body.menu-pinned .drawer {
 }
 
 .search-box span,
+.theme-switcher span,
 .group-title span {
   color: var(--muted);
   font-size: 11px;
@@ -237,13 +270,48 @@ body.menu-pinned .drawer {
   border: 1px solid var(--line);
   border-radius: 8px;
   outline: none;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--control-bg);
   color: var(--ink);
   padding: 0 12px;
 }
 
 .search-box input:focus {
-  border-color: rgba(39, 192, 173, 0.8);
+  border-color: var(--focus);
+}
+
+.theme-switcher {
+  display: grid;
+  gap: 7px;
+}
+
+.segmented-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 38px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--control-bg);
+}
+
+.segmented-control button {
+  min-width: 0;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 820;
+}
+
+.segmented-control button:last-child {
+  border-right: 0;
+}
+
+.segmented-control button:hover,
+.segmented-control button.active {
+  background: var(--active-bg);
+  color: var(--ink);
 }
 
 .menu-group {
@@ -287,7 +355,7 @@ body.menu-pinned .drawer {
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(21, 24, 28, 0.82);
+  background: var(--control-strong);
   color: var(--ink);
 }
 
@@ -306,12 +374,12 @@ body.menu-pinned .drawer {
   height: 58px;
   border-radius: 6px;
   object-fit: cover;
-  background: #070809;
+  background: var(--thumb-bg);
 }
 
 .character-button img.missing-image {
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--control-bg);
 }
 
 .character-copy {
@@ -368,8 +436,8 @@ body.menu-pinned .drawer {
 .pill-button:hover,
 .character-button.active,
 .pill-button.active {
-  border-color: rgba(240, 106, 80, 0.9);
-  background: rgba(240, 106, 80, 0.16);
+  border-color: var(--active);
+  background: var(--active-bg);
 }
 
 .empty-list {

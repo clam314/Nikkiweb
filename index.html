@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>NIKKE Spine Player</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" />
+    <script>
+      (() => {
+        const theme = localStorage.getItem("nikke-player-theme") === "dark" ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./vendor/spine-player-4.0.30/spine-player.css" />
   </head>
@@ -35,6 +41,14 @@
         <span>搜索人物</span>
         <input id="search-input" type="search" placeholder="名称 / 资源 ID" autocomplete="off" />
       </label>
+
+      <section class="theme-switcher" aria-label="显示模式">
+        <span>显示模式</span>
+        <div id="theme-toggle" class="segmented-control" role="group" aria-label="显示模式">
+          <button type="button" data-theme-value="light">白天</button>
+          <button type="button" data-theme-value="dark">黑暗</button>
+        </div>
+      </section>
 
       <section class="menu-group" aria-labelledby="characters-title">
         <div class="group-title">

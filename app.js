@@ -29,6 +29,7 @@ const SKILL_FIRE_ACTIONS = [
   "aim_fire_skill",
 ];
 const FIRE_OVERLAY_ACTIONS = ["aim_fire_hair", "aim_fire_hip"];
+const THEME_STORAGE_KEY = "nikke-player-theme";
 
 const CLIP_LABELS = {
   action: "动作",
@@ -103,6 +104,7 @@ const el = {
   hotzone: $("#menu-hotzone"),
   drawer: $("#drawer"),
   closeMenu: $("#close-menu"),
+  themeToggle: $("#theme-toggle"),
 };
 
 function activeCharacter() {
@@ -201,6 +203,33 @@ function showMessage(title, detail) {
 
 function hideMessage() {
   el.message.classList.remove("visible");
+}
+
+function normalizeTheme(theme) {
+  return theme === "dark" ? "dark" : "light";
+}
+
+function applyTheme(theme, options = {}) {
+  const nextTheme = normalizeTheme(theme);
+  document.documentElement.dataset.theme = nextTheme;
+
+  for (const button of el.themeToggle?.querySelectorAll("[data-theme-value]") || []) {
+    const isActive = button.dataset.themeValue === nextTheme;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  }
+
+  if (options.persist !== false) {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    } catch (error) {
+      console.debug(error);
+    }
+  }
+}
+
+function initialTheme() {
+  return normalizeTheme(document.documentElement.dataset.theme);
 }
 
 function mainLoopAction(costume = activeCostume()) {
@@ -1684,6 +1713,12 @@ el.hotzone.addEventListener("click", () => {
 
 el.closeMenu.addEventListener("click", closeMenu);
 
+el.themeToggle.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-theme-value]");
+  if (!button) return;
+  applyTheme(button.dataset.themeValue);
+});
+
 el.drawer.addEventListener("pointerleave", () => {
   if (!document.body.classList.contains("menu-pinned")) {
     document.body.classList.remove("menu-open");
@@ -1722,6 +1757,7 @@ window.addEventListener("unhandledrejection", (event) => {
   if (/spine|atlas|skel|png|asset|nikke/i.test(reason)) showMessage("播放器错误", reason);
 });
 
+applyTheme(initialTheme(), { persist: false });
 ensureState();
 if (LIBRARY.length) {
   renderMenu();
