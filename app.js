@@ -361,7 +361,7 @@ function chooseCharacter(character) {
   clearCostumeCache();
   resetStateToCharacter(character);
   renderMenu();
-  loadCurrent();
+  startDefaultPresentation();
 }
 
 function renderCharacters() {
@@ -1260,6 +1260,14 @@ function startPresentation(id) {
   if (id === "current") runCurrentPresentation(token);
 }
 
+function startDefaultPresentation() {
+  if (presentationPresets().some((item) => item.id === "portrait")) {
+    startPresentation("portrait");
+    return;
+  }
+  loadCurrent();
+}
+
 async function runPortraitPresentation(token) {
   const target = costumeByMode("stand") || activeCostume();
   if (!target) return;
@@ -1662,9 +1670,11 @@ function mergeRemoteCharacters(entries, availableModes = null) {
       seenRemote.add(entry.id);
       return true;
     })
-    .sort((a, b) => a.name.localeCompare(b.name))
     .map((entry) => buildCharacter(entry, availableModes))
-    .filter(Boolean);
+    .filter(Boolean)
+    .sort((a, b) =>
+      (a.displayName || a.name).localeCompare(b.displayName || b.name, "zh-Hans-CN"),
+    );
 
   LIBRARY = [...LIBRARY, ...remoteCharacters];
   return remoteCharacters.length;
@@ -1685,7 +1695,7 @@ async function loadNikkeDbIndex() {
     if (!before && LIBRARY.length) {
       resetStateToCharacter(randomCharacter());
       renderMenu();
-      loadCurrent();
+      startDefaultPresentation();
       return;
     }
 
@@ -1773,7 +1783,7 @@ applyTheme(initialTheme(), { persist: false });
 ensureState();
 if (LIBRARY.length) {
   renderMenu();
-  loadCurrent();
+  startDefaultPresentation();
 } else {
   showMessage("Loading", "正在载入 Nikke-db 人物索引");
 }

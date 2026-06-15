@@ -46,6 +46,27 @@ function nikkeDbSkin(id, mode) {
   return "default";
 }
 
+function normalizeNikkeNameKey(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function nikkeNameLocale() {
+  const locales = window.NIKKE_NAME_LOCALES || {};
+  const preferred = window.NIKKE_DEFAULT_NAME_LOCALE || document.documentElement.lang || "zh-CN";
+  return locales[preferred] || locales["zh-CN"] || null;
+}
+
+function nikkeDisplayName(entry) {
+  const locale = nikkeNameLocale();
+  const id = String(entry?.id || "").toLowerCase();
+  const name = String(entry?.name || id);
+  const nameKey = normalizeNikkeNameKey(name);
+  return locale?.byId?.[id] || locale?.byName?.[nameKey] || name;
+}
+
 function nikkeDbLive2d(entry, mode, label) {
   const id = entry.id;
   const modeConfig = {
@@ -93,6 +114,7 @@ function nikkeDbAvailableModes(entry, availableModes) {
 
 function buildNikkeDbCharacter(entry, availableModes = null) {
   const modes = nikkeDbAvailableModes(entry, availableModes);
+  const displayName = nikkeDisplayName(entry);
   const costumes = [
     modes.has("stand") && nikkeDbLive2d(entry, "stand", "立绘"),
     modes.has("cover") && nikkeDbLive2d(entry, "cover", "掩体"),
@@ -104,8 +126,8 @@ function buildNikkeDbCharacter(entry, availableModes = null) {
   return {
     id: entry.id,
     name: entry.name,
-    displayName: entry.name,
-    aliases: [entry.id, entry.name],
+    displayName,
+    aliases: [...new Set([entry.id, entry.name, displayName].filter(Boolean))],
     source: "nikke-db",
     manufacturer: "Nikke-db",
     thumbnail: nikkeDbSprite(entry.id),
