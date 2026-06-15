@@ -461,6 +461,62 @@ body.menu-suppressed .drawer:focus-within {
   grid-column: 1 / -1;
 }
 
+.repo-link {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  min-height: 50px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--control-bg);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.repo-link:hover,
+.repo-link:focus-visible {
+  border-color: var(--active);
+  background: var(--active-bg);
+  outline: none;
+}
+
+.repo-link svg {
+  width: 22px;
+  height: 22px;
+  justify-self: center;
+  fill: currentColor;
+  opacity: 0.86;
+}
+
+.repo-link span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.repo-link strong,
+.repo-link small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo-link strong {
+  font-size: 13px;
+}
+
+.repo-link small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
 .spine-player-controls,
 .spine-player-error {
   display: none !important;
