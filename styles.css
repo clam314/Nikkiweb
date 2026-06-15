@@ -219,6 +219,13 @@ body.menu-pinned .drawer {
   transform: translateX(0);
 }
 
+body.menu-suppressed .menu-hotzone:hover + .drawer,
+body.menu-suppressed .drawer,
+body.menu-suppressed .drawer:hover,
+body.menu-suppressed .drawer:focus-within {
+  transform: translateX(calc(-100% - 2px));
+}
+
 .drawer-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

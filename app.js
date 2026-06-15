@@ -1588,12 +1588,20 @@ function togglePause() {
 }
 
 function toggleMenu() {
+  document.body.classList.remove("menu-suppressed");
   document.body.classList.toggle("menu-pinned");
   document.body.classList.toggle("menu-open", document.body.classList.contains("menu-pinned"));
 }
 
-function closeMenu() {
+function closeMenu(options = {}) {
   document.body.classList.remove("menu-open", "menu-pinned");
+  if (options.suppress) document.body.classList.add("menu-suppressed");
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+}
+
+function releaseMenuSuppression(event) {
+  if (!document.body.classList.contains("menu-suppressed")) return;
+  if (event.clientX > 24) document.body.classList.remove("menu-suppressed");
 }
 
 function isNikkeDbCharacter(entry) {
@@ -1690,7 +1698,7 @@ async function loadNikkeDbIndex() {
 
 window.addEventListener("keydown", (event) => {
   if (event.key.toLowerCase() === "m") toggleMenu();
-  if (event.key === "Escape") closeMenu();
+  if (event.key === "Escape") closeMenu({ suppress: true });
   if (event.code === "Space") {
     event.preventDefault();
     togglePause();
@@ -1704,6 +1712,7 @@ el.search.addEventListener("input", (event) => {
 });
 
 el.hotzone.addEventListener("pointerenter", () => {
+  if (document.body.classList.contains("menu-suppressed")) return;
   document.body.classList.add("menu-open");
 });
 
@@ -1711,7 +1720,7 @@ el.hotzone.addEventListener("click", () => {
   toggleMenu();
 });
 
-el.closeMenu.addEventListener("click", closeMenu);
+el.closeMenu.addEventListener("click", () => closeMenu({ suppress: true }));
 
 el.themeToggle.addEventListener("click", (event) => {
   const button = event.target.closest("[data-theme-value]");
@@ -1720,10 +1729,13 @@ el.themeToggle.addEventListener("click", (event) => {
 });
 
 el.drawer.addEventListener("pointerleave", () => {
+  document.body.classList.remove("menu-suppressed");
   if (!document.body.classList.contains("menu-pinned")) {
     document.body.classList.remove("menu-open");
   }
 });
+
+document.addEventListener("pointermove", releaseMenuSuppression);
 
 window.addEventListener("error", (event) => {
   const message = event.message || "";
